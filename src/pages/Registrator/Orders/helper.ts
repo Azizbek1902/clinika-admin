@@ -8,8 +8,19 @@ export const columns = [
     },
   },
   {
-    header: 'Nomi',
-    accessorKey: 'title',
+    header: 'Navbat',
+    accessorKey: 'orderNumber',
+    meta: {
+      headerStyle: {
+        textAlign: 'left' as const,
+        width: '100px',
+        whiteSpace: 'nowrap' as const,
+      },
+    },
+  },
+  {
+    header: 'F.I.SH',
+    accessorKey: 'fullName',
     meta: {
       headerStyle: {
         textAlign: 'left' as const,
@@ -18,8 +29,8 @@ export const columns = [
     },
   },
   {
-    header: 'Doktor ismi',
-    accessorKey: 'doktor',
+    header: "Ko'rik nomi",
+    accessorKey: 'doktor.title',
     meta: {
       headerStyle: {
         textAlign: 'left' as const,
@@ -28,29 +39,35 @@ export const columns = [
     },
   },
   {
-    header: 'Xona raqami',
-    accessorKey: 'room',
+    header: 'Manzil',
+    accessorKey: 'address',
     meta: {
-      headerStyle: { width: '150px', textAlign: 'left' as const },
+      headerStyle: {
+        textAlign: 'left' as const,
+        whiteSpace: 'nowrap' as const,
+      },
     },
   },
   {
-    header: 'Narxi',
-    accessorKey: 'price',
+    header: 'Yil',
+    accessorKey: 'year',
     meta: {
-      headerStyle: { width: '150px', textAlign: 'right' as const },
-      bodyStyle: { textAlign: 'right' as const },
+      headerStyle: { width: '100px', textAlign: 'left' as const },
     },
-    cell: ({ getValue }: { getValue: () => number | undefined }) =>
-      formatPrice(getValue()),
+  },
+  {
+    header: 'Sana',
+    accessorKey: 'date',
+    meta: {
+      headerStyle: { width: '100px', textAlign: 'left' as const },
+    },
   },
 ];
-const formatPrice = (price?: any): any => {
-  if (price === undefined || price === null) return '-';
-  if (price === 0) return 'Bepul';
-
-  return `${new Intl.NumberFormat('uz-UZ').format(price)} so'm`;
+export const formatPrice = (price?: number) => {
+  if (!price) return '0';
+  return new Intl.NumberFormat('uz-UZ').format(price);
 };
+
 export interface ActiveType {
   label: string;
   value: string;

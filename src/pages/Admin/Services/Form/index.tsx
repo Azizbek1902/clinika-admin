@@ -1,6 +1,6 @@
 import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
-import service from '../../../../services/admin/book';
+import service from '../../../../services/admin/services';
 import { Col, Row } from 'antd';
 import Loader from '../../../../components/Loader';
 import InputComponent from '../../../../components/FormElements/Input';

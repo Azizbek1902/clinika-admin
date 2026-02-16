@@ -15,11 +15,8 @@ import Form from './Form';
 import { openErrorNotification } from '../../../components/Notification';
 import Empty from '../../../components/Empty';
 import type { User } from '../../../interface/user';
-import { useNavigate } from 'react-router-dom';
 
 export default () => {
-  const navigate = useNavigate();
-
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [itemId, setItemId] = useState<string | null>(null);
@@ -42,7 +39,7 @@ export default () => {
       const finalData = result?.data?.docs?.map((item: User, indx: number) => ({
         ...item,
         index: pagination.page * pagination.limit - pagination.limit + indx + 1,
-        fullName: `${item?.firstName} ${item?.lastName} ${item?.middleName}`,
+        fullName: `${item?.firstName} ${item?.lastName}`,
         provinceRegion: `${item?.province?.title}, ${item?.region?.title}`,
       }));
       setData(finalData || []);
@@ -71,26 +68,6 @@ export default () => {
 
   const fullColumns = [
     ...columns,
-    {
-      header: "Yo'nalishlar",
-      accessorKey: 'subjects',
-      cell: ({ row }: { row: { original: { _id: string } } }) => (
-        <div
-          style={{ color: 'var(--primary-color)', cursor: 'pointer' }}
-          onClick={() => {
-            navigate('/user-subjects', {
-              state: row.original?._id,
-            });
-          }}
-        >
-          Yo'nalishlar
-        </div>
-      ),
-      meta: {
-        headerStyle: { textAlign: 'center' as const },
-        bodyStyle: { textAlign: 'center' as const },
-      },
-    },
     {
       header: 'Amallar',
       accessorKey: 'actions',
@@ -171,7 +148,7 @@ export default () => {
       <CustomModal
         width={600}
         open={open}
-        title={itemId ? 'Foydanaluvchini tahrirlash' : "Foydanaluvchi qo'shish"}
+        title={itemId ? 'Admistratorni tahrirlash' : "Admistrator qo'shish"}
         onCancel={handleClose}
         content={
           <Form state={itemId} fetchData={fetchUsers} onClose={handleClose} />

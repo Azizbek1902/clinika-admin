@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Item from '../Item';
 import type { RootState } from '../../../../store';
 import { useSelector } from 'react-redux';
-import { adminLinks } from '../helper';
+import { adminLinks, registratorLinks } from '../helper';
 
 export const SidebarBody = () => {
   const { role } = useSelector((state: RootState) => state.auth);
@@ -24,19 +24,17 @@ export const SidebarBody = () => {
       return newSet;
     });
   };
-
   const isSubMenuOpen = (id: string) => openSubMenus.has(id);
-
   const routes: { [key: string]: any } = {
     admin: adminLinks,
+    registrator: registratorLinks,
   };
 
   return (
     <Container>
       <div>
         <Space />
-        {adminLinks?.map(
-          // {routes[role as string]?.map(
+        {routes[role as string]?.map(
           ({ id, icon, path, title, children }: any) => (
             <Item
               key={id}
@@ -55,7 +53,7 @@ export const SidebarBody = () => {
               }}
               isOpen={isSubMenuOpen(id)}
             />
-          )
+          ),
         )}
       </div>
     </Container>

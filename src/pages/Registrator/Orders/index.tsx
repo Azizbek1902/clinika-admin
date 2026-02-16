@@ -4,11 +4,10 @@ import Loader from '../../../components/Loader';
 import Table from '../../../components/Table';
 import { columns } from './helper';
 import { Content } from '../style';
-import service from '../../../services/admin/services';
+import service from '../../../services/admin/orderUser';
+import serviceCategory from '../../../services/admin/services';
 import CustomPagination from '../../../components/Pagination';
-import ActionsComponent from '../../../components/Table/Actions';
-import InputComponent from '../../../components/FormElements/Input';
-import { BsSearch } from 'react-icons/bs';
+import { FiPrinter } from 'react-icons/fi';
 import { openErrorNotification } from '../../../components/Notification';
 import Empty from '../../../components/Empty';
 import CustomModal from '../../../components/Modal';
@@ -21,31 +20,22 @@ export default () => {
   const [data, setData] = useState([]);
   const [pagination, setPagination] = useState({ page: 1, limit: 10 });
   const [total, setTotal] = useState(0);
-  const [search, setSearch] = useState<string>('');
   const [open, setOpen] = useState(false);
   const [itemId, setItemId] = useState<string | null>(null);
 
   const [categoryData, setCategoryData] = useState<
     { label: string; value: string }[]
   >([]);
-  const [selectCategory, setSelectCategory] = useState<boolean | null | string>(
-    null,
-  );
+  const [services, setServices] = useState<boolean | null | string>(null);
 
   const categoryQuery = useMemo(
-    () => (selectCategory ? `&bookcategory=${selectCategory}` : ''),
-    [selectCategory],
-  );
-
-  const searchQuery = useMemo(
-    () => (search.length > 3 ? `&search=${search}` : ''),
-    [search],
+    () => (services ? `&doktor=${services}` : ''),
+    [services],
   );
 
   const query = useMemo(
-    () =>
-      `page=${pagination.page}&limit=${pagination.limit}${searchQuery}${categoryQuery}`,
-    [pagination.page, pagination.limit, searchQuery, categoryQuery],
+    () => `page=${pagination.page}&limit=${pagination.limit}${categoryQuery}`,
+    [pagination.page, pagination.limit, categoryQuery],
   );
 
   const fetchData = async () => {
@@ -71,10 +61,10 @@ export default () => {
 
   const fetchProvinces = async () => {
     try {
-      const res = await service.getAll();
+      const res = await serviceCategory.getAll();
       const final = res?.data?.map(
-        (item: { title?: string; _id?: string }) => ({
-          label: item?.title,
+        (item: { title?: string; _id?: string; doktor?: string }) => ({
+          label: `${item?.title} (${item?.doktor})`,
           value: item?._id,
         }),
       );
@@ -92,51 +82,56 @@ export default () => {
   const handleChangePagination = (pageNumber: number) => {
     setPagination((prev) => ({ ...prev, page: pageNumber }));
   };
+  const [printData, setPrintData] = useState<any | null>(null);
 
-  const handleDelete = (id: string) => {
-    service
-      .delete(id)
-      .then(() => fetchData())
-      .catch((err) => {
-        console.log(err);
-        openErrorNotification(err?.response?.data?.message);
-      });
+  const handlePrint = (rowData: any) => {
+    setPrintData(rowData);
+
+    setTimeout(() => {
+      window.print();
+    }, 200);
   };
 
   const fullColumns = [
     ...columns,
-
     {
-      header: 'Amallar',
-      accessorKey: 'actions',
-      cell: ({ row }: { row: { original: { _id: string } } }) => (
-        <ActionsComponent
-          handleDelete={() => handleDelete(row.original?._id)}
-          handleEdit={() => {
-            setOpen(true);
-            setItemId(row.original?._id);
-          }}
-        />
+      header: 'Cheka chiqarish',
+      accessorKey: 'print',
+      cell: ({ row }: any) => (
+        <span
+          style={{ cursor: 'pointer', fontSize: '18px' }}
+          onClick={() => handlePrint(row.original)}
+        >
+          <FiPrinter />
+        </span>
       ),
       meta: {
         headerStyle: { width: '100px', textAlign: 'center' as const },
         bodyStyle: { textAlign: 'center' as const },
       },
     },
+
+    // {
+    //   header: 'Amallar',
+    //   accessorKey: 'actions',
+    //   cell: ({ row }: { row: { original: { _id: string } } }) => (
+    //     <ActionsComponent
+    //       handleDelete={() => handleDelete(row.original?._id)}
+    //       handleEdit={() => {
+    //         setOpen(true);
+    //         setItemId(row.original?._id);
+    //       }}
+    //     />
+    //   ),
+    //   meta: {
+    //     headerStyle: { width: '100px', textAlign: 'center' as const },
+    //     bodyStyle: { textAlign: 'center' as const },
+    //   },
+    // },
   ];
 
   useEffect(() => {
-    if (searchQuery?.length) {
-      const handler = setTimeout(() => {
-        fetchData();
-      }, 500);
-
-      return () => {
-        clearTimeout(handler);
-      };
-    } else {
-      fetchData();
-    }
+    fetchData();
   }, [pagination.page, pagination.limit, query]);
 
   const handleClose = () => {
@@ -149,27 +144,15 @@ export default () => {
       <Content>
         <div className='filter-panel'>
           <div className='filters'>
-            <InputComponent
-              allowClear
-              prefix={<BsSearch />}
-              placeholder='Qidiruv...'
-              height='30px'
-              width='180px'
-              value={search}
-              onChange={(e) => {
-                setPagination((prev) => ({ ...prev, page: 1 }));
-                setSearch(e.target.value);
-              }}
-            />
             <CustomSelect
               options={categoryData}
-              placeholder='Doktor'
+              placeholder='Xizmat turini tanlang'
               onChange={(e) => {
-                setSelectCategory(e);
+                setServices(e);
                 setPagination((prev) => ({ ...prev, page: 1 }));
               }}
-              value={selectCategory || null}
-              $width='160px'
+              value={services || null}
+              $width='200px'
               $height='40px'
               allowClear
             />
@@ -206,7 +189,7 @@ export default () => {
       <CustomModal
         width={600}
         open={open}
-        title={itemId ? 'Xizmatni tahrirlash' : "Xizmat qo'shish"}
+        title={itemId ? 'Buyurtmani tahrirlash' : "Buyurtma qo'shish"}
         onCancel={handleClose}
         content={
           <ProvinceForm
@@ -216,6 +199,46 @@ export default () => {
           />
         }
       />
+      {printData && (
+        <div className='print-area'>
+          <div className='chek'>
+            <div className='chek-header'>
+              <h2 className='clinic-name'>A DOKTOR A</h2>
+            </div>
+            <div className='chek-number'>{printData?.orderNumber}</div>
+            <div className='chek-body'>
+              <div className='row'>
+                <span className='text-chek'>Xona</span>
+                <span className='text-chek'>{printData?.room}-xona</span>
+              </div>
+
+              <div className='row'>
+                <span className='text-chek'>Muolaja</span>
+                <span className='text-chek'>{printData?.doktor?.title}</span>
+              </div>
+
+              <div className='row'>
+                <span className='text-chek'>Doktor</span>
+                <span className='text-chek'>{printData?.doktor?.doktor}</span>
+              </div>
+
+              <div className='row'>
+                <span className='text-chek'>Vaqti</span>
+                <span className='text-chek'>
+                  {printData?.date} {printData?.time}
+                </span>
+              </div>
+
+              <div className='flex-row'>
+                <span className='text-chek'>Telefon</span>
+                <span className='text-chek'>
+                  {import.meta.env.VITE_PRINT_PHONE_1}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

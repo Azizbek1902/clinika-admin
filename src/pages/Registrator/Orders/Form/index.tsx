@@ -1,7 +1,7 @@
 import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
-import service from '../../../../services/admin/book';
-import servicedoktor from '../../../../services/admin/book';
+import service from '../../../../services/admin/orderUser';
+import servicedoktor from '../../../../services/admin/services';
 import { Col, Row } from 'antd';
 import Loader from '../../../../components/Loader';
 import InputComponent from '../../../../components/FormElements/Input';
@@ -10,6 +10,7 @@ import styled from 'styled-components';
 import CancelButton from '../../../../components/FormElements/CancelButton';
 import { openErrorNotification } from '../../../../components/Notification';
 import CustomSelect from '../../../../components/FormElements/Select';
+import { formatPrice } from '../helper';
 
 const Actions = styled.div`
   display: flex;
@@ -91,8 +92,13 @@ export default ({
     try {
       const res = await servicedoktor.getAll();
       const final = res?.data?.map(
-        (item: { title?: string; _id?: string }) => ({
-          label: item?.title,
+        (item: {
+          title?: string;
+          _id?: string;
+          doktor?: string;
+          price?: number;
+        }) => ({
+          label: `${item?.title} — ${item?.doktor} | ${formatPrice(item?.price)} so'm`,
           value: item?._id,
         }),
       );
