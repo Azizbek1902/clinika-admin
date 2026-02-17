@@ -38,19 +38,20 @@ export const columns = [
     header: 'Narxi',
     accessorKey: 'price',
     meta: {
-      headerStyle: { width: '150px', textAlign: 'right' as const },
-      bodyStyle: { textAlign: 'right' as const },
+      headerStyle: { width: '150px', textAlign: 'left' as const },
+      bodyStyle: { textAlign: 'left' as const },
     },
-    cell: ({ getValue }: { getValue: () => number | undefined }) =>
-      formatPrice(getValue()),
+    cell: ({ row }: any) => formatPrice(row.original.price),
   },
 ];
-const formatPrice = (price?: any): any => {
+
+const formatPrice = (price?: number | null): string => {
   if (price === undefined || price === null) return '-';
   if (price === 0) return 'Bepul';
 
   return `${new Intl.NumberFormat('uz-UZ').format(price)} so'm`;
 };
+
 export interface ActiveType {
   label: string;
   value: string;

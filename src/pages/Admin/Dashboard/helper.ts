@@ -1,46 +1,63 @@
 // helper.ts
-export const statsCards = [
-  {
-    title: 'Jami mahsulotlar',
-    value: 1240,
-    unit: 'dona',
-  },
-  {
-    title: 'Bugungi kirim',
-    value: 320,
-    unit: 'dona',
-  },
-  {
-    title: 'Bugungi chiqim',
-    value: 280,
-    unit: 'dona',
-  },
-  {
-    title: 'Kam qolgan mahsulotlar',
-    value: 18,
-    unit: 'ta',
-  },
+export type Role = 'admin' | 'registrator';
+
+export interface StatsCard {
+  title: string;
+  value: number;
+  unit: string;
+  icon?: string;
+}
+
+export interface PatientFlow {
+  day: string;
+  patients: number;
+  cancelled: number;
+}
+
+export interface ServiceDistribution {
+  name: string;
+  value: number;
+}
+
+export interface DoctorStats {
+  name: string;
+  patients: number;
+}
+
+// KPI Cards
+export const statsCards: StatsCard[] = [
+  { title: 'Bugungi bemorlar', value: 86, unit: 'nafar', icon: '👤' },
+  { title: 'Bugungi tushum', value: 12400000, unit: "so'm", icon: '💰' },
+  { title: 'Bugungi qabul qilingan', value: 72, unit: 'nafar', icon: '🩺' },
+  { title: 'Bekor qilingan qabullar', value: 7, unit: 'ta', icon: '❌' },
 ];
 
-export const stockFlowChart = [
-  { day: 'Du', in: 120, out: 90 },
-  { day: 'Se', in: 200, out: 140 },
-  { day: 'Ch', in: 150, out: 100 },
-  { day: 'Pa', in: 80, out: 60 },
-  { day: 'Ju', in: 170, out: 120 },
-  { day: 'Sh', in: 220, out: 160 },
-  { day: 'Ya', in: 180, out: 130 },
+// LineChart → haftalik bemor oqimi
+export const patientFlowChart: PatientFlow[] = [
+  { day: 'Du', patients: 24, cancelled: 2 },
+  { day: 'Se', patients: 31, cancelled: 4 },
+  { day: 'Ch', patients: 28, cancelled: 3 },
+  { day: 'Pa', patients: 35, cancelled: 5 },
+  { day: 'Ju', patients: 42, cancelled: 6 },
+  { day: 'Sh', patients: 38, cancelled: 4 },
+  { day: 'Ya', patients: 30, cancelled: 2 },
 ];
 
-export const categoryChart = [
-  { name: 'Elektronika', value: 420 },
-  { name: 'Oziq-ovqat', value: 320 },
-  { name: 'Qurilish', value: 260 },
-  { name: 'Maishiy texnika', value: 180 },
+// PieChart → Xizmatlar bo‘yicha taqsimot
+// Recharts uchun ChartDataInput type bilan moslashtiramiz
+export const serviceDistributionChart: { [key: string]: number | string }[] = [
+  { name: 'Stomatologiya', value: 120 },
+  { name: 'Terapiya', value: 95 },
+  { name: 'Diagnostika', value: 70 },
+  { name: 'Jarrohlik', value: 40 },
 ];
 
-export const stockStatusChart = [
-  { name: 'Normal', value: 760 },
-  { name: 'Kam qolgan', value: 140 },
-  { name: 'Tugagan', value: 60 },
+// BarChart → Doktorlar bo‘yicha bemorlar
+export const doctorStatsChart: { [key: string]: number | string }[] = [
+  { name: 'Dr. Aliyev', patients: 42 },
+  { name: 'Dr. Karimov', patients: 38 },
+  { name: 'Dr. Ismoilov', patients: 35 },
+  { name: 'Dr. Xasanova', patients: 33 },
+  { name: 'Dr. Nazarov', patients: 28 },
+  { name: 'Dr. Raximov', patients: 25 },
 ];
