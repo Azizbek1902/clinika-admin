@@ -8,8 +8,29 @@ export const columns = [
     },
   },
   {
+    header: 'Navbat',
+    accessorKey: 'orderNumber',
+    meta: {
+      headerStyle: {
+        textAlign: 'left' as const,
+        width: '100px',
+        whiteSpace: 'nowrap' as const,
+      },
+    },
+  },
+  {
     header: 'F.I.SH',
     accessorKey: 'fullName',
+    meta: {
+      headerStyle: {
+        textAlign: 'left' as const,
+        whiteSpace: 'nowrap' as const,
+      },
+    },
+  },
+  {
+    header: "Ko'rik nomi",
+    accessorKey: 'doktor.title',
     meta: {
       headerStyle: {
         textAlign: 'left' as const,
@@ -31,17 +52,21 @@ export const columns = [
     header: 'Yil',
     accessorKey: 'year',
     meta: {
-      headerStyle: { width: '150px', textAlign: 'left' as const },
+      headerStyle: { width: '100px', textAlign: 'left' as const },
     },
   },
   {
     header: 'Sana',
     accessorKey: 'date',
     meta: {
-      headerStyle: { width: '150px', textAlign: 'left' as const },
+      headerStyle: { width: '100px', textAlign: 'left' as const },
     },
   },
 ];
+export const formatPrice = (price?: number) => {
+  if (!price) return '0';
+  return new Intl.NumberFormat('uz-UZ').format(price);
+};
 
 export interface ActiveType {
   label: string;

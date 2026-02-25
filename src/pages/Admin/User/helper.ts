@@ -1,8 +1,3 @@
-import { Image } from 'antd';
-import React from 'react';
-const baseURL = import.meta.env.VITE_IMAGE_URL;
-import Img from '../../../assets/avatar.jpg';
-
 export const formatPhone = (phone: string): string => {
   const digits = phone?.replace(/\D/g, '');
   const uzNumber = digits?.length > 9 ? digits?.slice(-9) : digits;
@@ -27,33 +22,6 @@ export const columns = [
     },
   },
   {
-    header: 'Rasm',
-    accessorKey: 'photo',
-    meta: {
-      headerStyle: {
-        width: '60px',
-      },
-    },
-    cell: ({ row }: any) => {
-      const avatar = row.original.photo;
-      const photo = avatar ? `${baseURL}/${avatar}` : Img;
-
-      return React.createElement(
-        'div',
-        { style: { display: 'flex', alignItems: 'center', gap: '8px' } },
-        React.createElement(Image, {
-          src: photo,
-          alt: row.original.fullName,
-          width: 45,
-          height: 45,
-          style: { borderRadius: '50%', objectFit: 'cover', cursor: 'pointer' },
-          preview: true,
-          fallback: Img,
-        })
-      );
-    },
-  },
-  {
     header: 'F.I.Sh',
     accessorKey: 'fullName',
     meta: {
@@ -68,28 +36,7 @@ export const columns = [
     accessorKey: 'phone',
     cell: ({ row }: any) => formatPhone(row.original.phone),
     meta: {
-      headerStyle: { width: '150px', textAlign: 'left' as const },
-    },
-  },
-  // {
-  //     header: 'Guruh',
-  //     accessorKey: 'group',
-  //     meta: {
-  //         headerStyle: { width: '150px', textAlign: 'left' as const },
-  //     },
-  // },
-  {
-    header: 'Hudud',
-    accessorKey: 'provinceRegion',
-    meta: {
       headerStyle: { width: '200px', textAlign: 'left' as const },
-    },
-  },
-  {
-    header: 'Guruh',
-    accessorKey: 'group.title',
-    meta: {
-      headerStyle: { width: '150px', textAlign: 'left' as const },
     },
   },
 ];

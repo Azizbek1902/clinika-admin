@@ -97,7 +97,7 @@ export default ({
               type='text'
               onChange={formik.handleChange}
               value={formik.values.firstName}
-              placeholder='Bekzod'
+              placeholder='Ism'
             />
           </Col>
           <Col span={24} md={12}>
@@ -107,7 +107,7 @@ export default ({
               type='text'
               onChange={formik.handleChange}
               value={formik.values.lastName}
-              placeholder='Mahammadov'
+              placeholder='Familya'
             />
           </Col>
           <Col span={24} md={12}>

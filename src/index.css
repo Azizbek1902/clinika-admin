@@ -77,6 +77,86 @@ h1 {
 button {
   cursor: pointer;
 }
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  .print-area,
+  .print-area * {
+    visibility: visible;
+  }
+
+  .print-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    background: white;
+  }
+
+  .chek {
+    width: 360px;
+    padding: 25px 22px;
+    border: 2.5px solid #000;
+    border-radius: 28px;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    color: #111;
+    margin-top: 10px;
+  }
+
+  /* HEADER */
+  .clinic-name {
+    text-align: center;
+    font-size: 26px;
+    letter-spacing: 3px;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+
+  /* ORDER NUMBER */
+  .chek-number {
+    text-align: center;
+    font-size: 130px;
+    font-family: serif;
+    font-weight: 800;
+    margin-top: -20px;
+  }
+
+  /* BODY */
+  .chek-body {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 18px;
+  }
+
+  .row {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px dashed #ccc;
+    padding-bottom: 3px;
+  }
+  .flex-row {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 3px;
+  }
+
+  .row span:first-child {
+    font-weight: 600;
+  }
+  .text-chek {
+    font-size: 10px;
+  }
+  /* Print margin control */
+  @page {
+    margin: 10mm;
+  }
+}
+
 /* button {
   border-radius: 8px;
   border: 1px solid transparent;
